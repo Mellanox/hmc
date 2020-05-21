@@ -311,8 +311,8 @@ hmc_status_t hmc_ibcast(hmc_bcast_args_t *args, void **request) {
                                HMC_BCAST_ARGS_FIELD_COMM));
     HMC_VERBOSE_DBG_ONLY(hmc_comm->ctx, 10, "HMC ibcast start, buf %p, size %d, root %d, comm %d, "
                          "comm_size %d, am_i_root %d",
-                         args->buf, args->size, args->root,
-                         hmc_comm->comm_id, hmc_comm->commsize, hmc_comm->rank == root);
+                         args->address, args->size, args->root,
+                         hmc_comm->comm_id, hmc_comm->commsize, hmc_comm->rank == args->root);
     hmc_coll_req_t *req = ucs_mpool_get(&hmc_comm->ctx->coll_reqs_pool);
     req->non_blocking= 1;
     hmc_init_bcast(args->address, args->size, args->root,
@@ -334,7 +334,7 @@ hmc_status_t hmc_bcast(hmc_bcast_args_t *args) {
     HMC_VERBOSE_DBG_ONLY(hmc_comm->ctx, 10, "HMC bcast start, buf %p, size %zd, root %d, comm %d, "
                          "comm_size %d, am_i_root %d",
                          args->address, args->size, args->root,
-                         hmc_comm->comm_id, hmc_comm->commsize, hmc_comm->rank == root);
+                         hmc_comm->comm_id, hmc_comm->commsize, hmc_comm->rank == args->root);
     req.non_blocking = 0;
     hmc_init_bcast(args->address, args->size, args->root,
                    args->field_mask & HMC_BCAST_ARGS_FIELD_MR ? args->mr : NULL,
