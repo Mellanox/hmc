@@ -7,6 +7,8 @@
 
 #define MAX_TEST_SIZE 4194304
 #define MIN_TEST_SIZE 4
+#define ITERS         8
+#define NSIZES        128
 
 #ifdef CUDA_ENABLED
 #include "cuda_runtime.h"
@@ -49,8 +51,6 @@ int main (int argc, char **argv) {
     int status = 0, global_status, ii, ss, root, completed;
     void *buf, *cpu_buf, *check_buf, *cuda_buf, *req;
     size_t test_size;
-    const int iters = 1;
-    const int nsizes = 1;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -88,13 +88,13 @@ int main (int argc, char **argv) {
                       HMC_BCAST_ARGS_FIELD_SIZE ||
                       HMC_BCAST_ARGS_FIELD_ROOT ||
                       HMC_BCAST_ARGS_FIELD_COMM;
-    for (ss = 0; ss < nsizes; ss++) {
+    for (ss = 0; ss < NSIZES; ss++) {
         test_size = (size_t)(MIN_TEST_SIZE + rand() % (MAX_TEST_SIZE - MIN_TEST_SIZE));
         root = rand() % size;
         if (rank == 0) {
             printf("size %10zd, root %3d ...\n", test_size ,root);
         }
-        for (ii=0; ii < iters; ii++) {
+        for (ii=0; ii < ITERS; ii++) {
             cpu_buf = malloc(test_size);
             check_buf = malloc(test_size);
             memset(check_buf, 0x123, test_size);
