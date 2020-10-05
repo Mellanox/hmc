@@ -132,7 +132,7 @@ int clean_ctx(struct app_context *ctx)
 {
     int i;
     ucs_status_t status;
-    void *close_req;
+    void *close_req, *tmp;
     HMC_VERBOSE(ctx, 2, "Cleaning HMC ctx: %p", ctx);
 
     if (ctx->world_eps) {
@@ -153,8 +153,8 @@ int clean_ctx(struct app_context *ctx)
                 ucp_request_free(close_req);
             }
         }
-        void *tmp = malloc(sizeof(ctx->world_eps));
-        ctx->params.allgather(tmp, tmp , 1, ctx->params.oob_context);
+        tmp = malloc(ctx->params.world_size);
+        ctx->params.allgather(tmp, tmp, 1, ctx->params.oob_context);
         free(tmp);
     }
     if (ctx->rcache) {
@@ -856,7 +856,9 @@ struct app_context* setup_ctx(hmc_ctx_params_t *params, hmc_context_config_t *hm
     }
     HMC_VERBOSE(ctx, 1, "HMC SETUP complete: ctx %p", ctx);
 #ifdef CUDA_ENABLED
-    hmc_cuda_init(&ctx->cuda);
+    if (HMC_SUCCESS != hmc_cuda_init(&ctx->cuda)) {
+        HMC_VERBOSE(ctx, 1, "CUDA support is not available");
+    }
 #endif
     return ctx;
 
