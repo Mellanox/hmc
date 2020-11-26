@@ -305,9 +305,9 @@ hmc_status_t hmc_req_wait(void* request)
 HMC_EXPORT
 hmc_status_t hmc_ibcast(hmc_bcast_args_t *args, void **request) {
     hmc_comm_t *hmc_comm = (hmc_comm_t*)args->comm;
-    assert(args->field_mask & (HMC_BCAST_ARGS_FIELD_ADDRESS ||
-                               HMC_BCAST_ARGS_FIELD_SIZE ||
-                               HMC_BCAST_ARGS_FIELD_ROOT ||
+    assert(args->field_mask & (HMC_BCAST_ARGS_FIELD_ADDRESS |
+                               HMC_BCAST_ARGS_FIELD_SIZE |
+                               HMC_BCAST_ARGS_FIELD_ROOT |
                                HMC_BCAST_ARGS_FIELD_COMM));
     HMC_VERBOSE_DBG_ONLY(hmc_comm->ctx, 10, "HMC ibcast start, buf %p, size %d, root %d, comm %d, "
                          "comm_size %d, am_i_root %d",
@@ -327,9 +327,9 @@ HMC_EXPORT
 hmc_status_t hmc_bcast(hmc_bcast_args_t *args) {
     hmc_comm_t *hmc_comm = (hmc_comm_t*)args->comm;
     hmc_coll_req_t req = {0};
-    assert(args->field_mask & (HMC_BCAST_ARGS_FIELD_ADDRESS ||
-                               HMC_BCAST_ARGS_FIELD_SIZE ||
-                               HMC_BCAST_ARGS_FIELD_ROOT ||
+    assert(args->field_mask & (HMC_BCAST_ARGS_FIELD_ADDRESS |
+                               HMC_BCAST_ARGS_FIELD_SIZE |
+                               HMC_BCAST_ARGS_FIELD_ROOT |
                                HMC_BCAST_ARGS_FIELD_COMM));
     HMC_VERBOSE_DBG_ONLY(hmc_comm->ctx, 10, "HMC bcast start, buf %p, size %zd, root %d, comm %d, "
                          "comm_size %d, am_i_root %d",

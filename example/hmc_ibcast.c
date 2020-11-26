@@ -56,8 +56,8 @@ int main (int argc, char **argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    ctx_params.field_mask = HMC_CTX_PARAMS_FIELD_WORLD_SIZE ||
-                            HMC_CTX_PARAMS_FIELD_ALLGATHER  ||
+    ctx_params.field_mask = HMC_CTX_PARAMS_FIELD_WORLD_SIZE |
+                            HMC_CTX_PARAMS_FIELD_ALLGATHER  |
                             HMC_CTX_PARAMS_FIELD_OOB_CONTEXT;
     ctx_params.allgather   = hmc_allgather;
     ctx_params.oob_context = (void*)MPI_COMM_WORLD;
@@ -68,10 +68,10 @@ int main (int argc, char **argv) {
         goto error;
     }
     hmc_context_config_release(ctx_config);
-    comm_params.field_mask = HMC_COMM_PARAMS_FIELD_COMM_SIZE        ||
-                             HMC_COMM_PARAMS_FIELD_COMM_RANK        ||
-                             HMC_COMM_PARAMS_FIELD_COMM_RANK_TO_CTX ||
-                             HMC_COMM_PARAMS_FIELD_RANK_MAPPER_CTX  ||
+    comm_params.field_mask = HMC_COMM_PARAMS_FIELD_COMM_SIZE        |
+                             HMC_COMM_PARAMS_FIELD_COMM_RANK        |
+                             HMC_COMM_PARAMS_FIELD_COMM_RANK_TO_CTX |
+                             HMC_COMM_PARAMS_FIELD_RANK_MAPPER_CTX  |
                              HMC_COMM_PARAMS_FIELD_COMM_OOB_CONTEXT;
     comm_params.comm_oob_context = (void*)MPI_COMM_WORLD;
     comm_params.comm_size        = size;
@@ -84,9 +84,9 @@ int main (int argc, char **argv) {
         goto error;
     }
 
-    args.field_mask = HMC_BCAST_ARGS_FIELD_ADDRESS ||
-                      HMC_BCAST_ARGS_FIELD_SIZE ||
-                      HMC_BCAST_ARGS_FIELD_ROOT ||
+    args.field_mask = HMC_BCAST_ARGS_FIELD_ADDRESS |
+                      HMC_BCAST_ARGS_FIELD_SIZE |
+                      HMC_BCAST_ARGS_FIELD_ROOT |
                       HMC_BCAST_ARGS_FIELD_COMM;
     for (ss = 0; ss < NSIZES; ss++) {
         test_size = (size_t)(MIN_TEST_SIZE + rand() % (MAX_TEST_SIZE - MIN_TEST_SIZE));
