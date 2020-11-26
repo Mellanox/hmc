@@ -311,10 +311,10 @@ hmc_comm_t* setup_comm(struct app_context *ctx, hmc_comm_params_t *params) {
     ucs_list_head_init(&comm->bpool);
     ucs_list_head_init(&comm->pending_q);
 
-    if (!(params->field_mask & (HMC_COMM_PARAMS_FIELD_COMM_SIZE        ||
-                                HMC_COMM_PARAMS_FIELD_COMM_RANK        ||
-                                HMC_COMM_PARAMS_FIELD_COMM_RANK_TO_CTX ||
-                                HMC_COMM_PARAMS_FIELD_RANK_MAPPER_CTX  ||
+    if (!(params->field_mask & (HMC_COMM_PARAMS_FIELD_COMM_SIZE        |
+                                HMC_COMM_PARAMS_FIELD_COMM_RANK        |
+                                HMC_COMM_PARAMS_FIELD_COMM_RANK_TO_CTX |
+                                HMC_COMM_PARAMS_FIELD_RANK_MAPPER_CTX  |
                                 HMC_COMM_PARAMS_FIELD_COMM_OOB_CONTEXT))) {
         HMC_ERR("HMC Comm Params error: comm_size, comm_rank, comm_oob_context, rank_mapper"
                 " have to be provided");
@@ -680,8 +680,8 @@ struct app_context* setup_ctx(hmc_ctx_params_t *params, hmc_context_config_t *hm
         goto error;
     }
 
-    if (!(params->field_mask & (HMC_CTX_PARAMS_FIELD_WORLD_SIZE ||
-                                HMC_CTX_PARAMS_FIELD_ALLGATHER  ||
+    if (!(params->field_mask & (HMC_CTX_PARAMS_FIELD_WORLD_SIZE |
+                                HMC_CTX_PARAMS_FIELD_ALLGATHER  |
                                 HMC_CTX_PARAMS_FIELD_OOB_CONTEXT))) {
         HMC_ERR("HMC Params error: world_size, allgather, oob_context have to be provided");
         goto error;
@@ -689,6 +689,7 @@ struct app_context* setup_ctx(hmc_ctx_params_t *params, hmc_context_config_t *hm
     ctx->params.world_size  = params->world_size;
     ctx->params.allgather   = params->allgather;
     ctx->params.oob_context = params->oob_context;
+    ctx->params.mt_enabled  = 0;
 
     if (params->field_mask & HMC_CTX_PARAMS_FIELD_RUNTIME_PROGRESS) {
         ctx->params.runtime_progress = params->runtime_progress;
